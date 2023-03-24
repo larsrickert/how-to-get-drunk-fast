@@ -4,6 +4,7 @@
     "plugin:vue/vue3-recommended",
     "eslint:recommended",
     "@vue/eslint-config-typescript/recommended",
+    "plugin:storybook/recommended",
     "@vue/eslint-config-prettier"
   ],
   "env": {
