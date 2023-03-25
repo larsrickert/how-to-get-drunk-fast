@@ -1,3 +1,4 @@
+import "@/styles/element-plus.scss";
 import "@/styles/index.scss";
 import type { Preview } from "@storybook/vue3";
 

@@ -1,6 +1,9 @@
 lockfileVersion: '6.0'
 
 dependencies:
+  '@fontsource/indie-flower':
+    specifier: ^4.5.10
+    version: 4.5.10
   '@fontsource/open-sans':
     specifier: ^4.5.14
     version: 4.5.14
@@ -1658,6 +1661,10 @@ packages:
     resolution: {integrity: sha512-+sAUfpQ3Frz+VCbPCqj+cZzvEESy3fjSeT/pDWkYCWOBXYNNKZfuVsHuv8/JO2zze8+Eb/Q7a6hZVgzS81fLbQ==}
     dependencies:
       '@floating-ui/core': 1.2.4
+    dev: false
+
+  /@fontsource/indie-flower@4.5.10:
+    resolution: {integrity: sha512-eT9FyIamAXk9v7XHtTpuOjI1kbxp5NKePfRJ5qy45T2poUWayfU4ub9ISDeVZRVKOxAsYIzk0+3OSraTsC0g5Q==}
     dev: false
 
   /@fontsource/open-sans@4.5.14:

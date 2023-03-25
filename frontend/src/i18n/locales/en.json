@@ -1,3 +1,5 @@
 {
-  "message": "Hello World"
+  "global": {
+    "appName": "How To Get Drunk - Fast"
+  }
 }

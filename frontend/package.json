@@ -16,6 +16,7 @@
     "preinstall": "npx only-allow pnpm"
   },
   "dependencies": {
+    "@fontsource/indie-flower": "^4.5.10",
     "@fontsource/open-sans": "^4.5.14",
     "@vueuse/core": "^9.13.0",
     "element-plus": "^2.3.1",

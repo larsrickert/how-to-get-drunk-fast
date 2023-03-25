@@ -1,7 +1,34 @@
 @use "mixins";
-@use "@fontsource/open-sans/latin";
+@use "layouts";
+@use "@fontsource/open-sans/latin" as *;
+@use "@fontsource/indie-flower/latin" as *;
+
+html {
+  height: 100%;
+}
 
 body {
   margin: 0;
   font-family: "Open Sans", sans-serif;
+  height: 100%;
+  display: grid;
+  place-items: center;
+
+  background: var(--el-color-primary); /* fallback for old browsers */
+  background: linear-gradient(
+      to bottom,
+      var(--el-color-primary),
+      var(--el-color-primary-light-3)
+    )
+    fixed;
+  color: #fff;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Indie Flower", sans-serif;
 }
