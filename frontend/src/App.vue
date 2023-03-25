@@ -1,6 +1,10 @@
 <script lang="ts" setup>
+import { useDark } from "@vueuse/core";
 import { ElContainer, ElHeader, ElMain } from "element-plus";
 import { RouterView } from "vue-router";
+
+// enable automatic dark mode based on user preferences
+useDark();
 </script>
 
 <template>
@@ -18,7 +22,7 @@ import { RouterView } from "vue-router";
 @use "@/styles/index.scss";
 
 .el-header {
-  border-bottom: 1px solid var(--el-border-color-lighter);
+  border-bottom: 1px solid var(--el-border-color-light);
   box-shadow: var(--el-box-shadow);
   display: flex;
   align-items: center;
