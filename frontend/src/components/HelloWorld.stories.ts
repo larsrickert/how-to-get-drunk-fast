@@ -1,13 +1,15 @@
-import type { VueProps } from "@/types";
 import type { Meta, StoryObj } from "@storybook/vue3";
 import Component from "./HelloWorld.vue";
 
-type Args = VueProps<typeof Component>;
+type Story = StoryObj<typeof Component>;
 
-export default { component: Component } as Meta<Args>;
+const meta = {
+  component: Component,
+} satisfies Meta<typeof Component>;
+export default meta;
 
 export const Primary = {
   args: {
     msg: "Hello Storybook",
   },
-} satisfies StoryObj<Args>;
+} satisfies Story;
