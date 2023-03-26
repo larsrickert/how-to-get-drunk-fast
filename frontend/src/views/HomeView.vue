@@ -1,26 +1,35 @@
 <script lang="ts" setup>
-import { useI18n } from "vue-i18n";
+import HomeTemplate from "@/components/templates/HomeTemplate.vue";
+import { promiseTimeout } from "@vueuse/core";
+import { ElMessage } from "element-plus";
+import { ref } from "vue";
 
-const { t } = useI18n();
+const isPartyLoading = ref(false);
+
+const handleJoinParty = async (partyCode: string) => {
+  isPartyLoading.value = true;
+  await promiseTimeout(1000);
+  ElMessage({
+    message: `Not implemented yet. Party code: ${partyCode}`,
+    type: "warning",
+    grouping: true,
+  });
+  isPartyLoading.value = false;
+};
+
+const handleCreateParty = () => {
+  ElMessage({
+    message: "Not implemented yet.",
+    type: "warning",
+    grouping: true,
+  });
+};
 </script>
 
 <template>
-  <div class="page__content">
-    <h1 class="headline">{{ t("global.appName") }}</h1>
-  </div>
+  <HomeTemplate
+    :is-party-loading="isPartyLoading"
+    @join-party="handleJoinParty"
+    @create-party="handleCreateParty"
+  />
 </template>
-
-<style lang="scss" scoped>
-@use "@/styles/mixins.scss" as *;
-
-.headline {
-  font-size: 3.5rem;
-  font-weight: 600;
-  margin: 0;
-  text-align: center;
-
-  @include breakpoint(m) {
-    font-size: 2.5rem;
-  }
-}
-</style>
