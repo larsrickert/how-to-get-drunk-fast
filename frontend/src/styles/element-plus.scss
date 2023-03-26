@@ -1,0 +1,11 @@
+/* just override what we need */
+@forward "element-plus/theme-chalk/src/common/var.scss" with (
+  $colors: (
+    "primary": (
+      // override element plus primary color
+      "base": #6a5adf,
+    ),
+  )
+);
+
+@use "element-plus/theme-chalk/src/index.scss" as *;

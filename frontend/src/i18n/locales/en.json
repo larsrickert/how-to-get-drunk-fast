@@ -1,3 +1,12 @@
 {
-  "message": "Hello World"
+  "global": {
+    "appName": "How To Get Drunk - Fast"
+  },
+  "pages": {
+    "home": {
+      "joinParty": "Join party",
+      "createParty": "or create a new party",
+      "partyCodePlaceholder": "Enter party code..."
+    }
+  }
 }

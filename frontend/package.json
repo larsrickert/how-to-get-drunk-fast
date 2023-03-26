@@ -10,13 +10,16 @@
     "test:unit": "vitest --environment jsdom",
     "build-only": "vite build",
     "type-check": "vue-tsc --noEmit -p tsconfig.vitest.json --composite false",
-    "lint": "eslint . --ext .vue,.js,.ts --fix --ignore-path .gitignore",
-    "storybook": "storybook dev -p 6006",
+    "lint": "eslint . --ext .vue,.js,.ts --fix --ignore-path ../.gitignore",
+    "storybook": "storybook dev -p 6006 --no-open",
     "prepare": "simple-git-hooks",
     "preinstall": "npx only-allow pnpm"
   },
   "dependencies": {
+    "@element-plus/icons-vue": "^2.1.0",
+    "@fontsource/indie-flower": "^4.5.10",
     "@fontsource/open-sans": "^4.5.14",
+    "@vueuse/core": "^9.13.0",
     "element-plus": "^2.3.1",
     "pinia": "^2.0.33",
     "vue": "^3.2.47",
@@ -57,6 +60,6 @@
     "pre-commit": "cd frontend && pnpm lint-staged"
   },
   "lint-staged": {
-    "*.{vue,js,ts}": "eslint --fix --ignore-path .gitignore"
+    "*.{vue,js,ts}": "eslint --fix --ignore-path ../.gitignore"
   }
 }

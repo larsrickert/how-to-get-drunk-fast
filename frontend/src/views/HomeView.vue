@@ -1,14 +1,35 @@
 <script lang="ts" setup>
-import HelloWorld from "@/components/HelloWorld.vue";
-import { useI18n } from "vue-i18n";
+import HomeTemplate from "@/components/templates/HomeTemplate.vue";
+import { promiseTimeout } from "@vueuse/core";
+import { ElMessage } from "element-plus";
+import { ref } from "vue";
 
-const { t } = useI18n();
+const isPartyLoading = ref(false);
+
+const handleJoinParty = async (partyCode: string) => {
+  isPartyLoading.value = true;
+  await promiseTimeout(1000);
+  ElMessage({
+    message: `Not implemented yet. Party code: ${partyCode}`,
+    type: "warning",
+    grouping: true,
+  });
+  isPartyLoading.value = false;
+};
+
+const handleCreateParty = () => {
+  ElMessage({
+    message: "Not implemented yet.",
+    type: "warning",
+    grouping: true,
+  });
+};
 </script>
 
 <template>
-  <div>
-    <HelloWorld :msg="t('message')" />
-  </div>
+  <HomeTemplate
+    :is-party-loading="isPartyLoading"
+    @join-party="handleJoinParty"
+    @create-party="handleCreateParty"
+  />
 </template>
-
-<style lang="scss" scoped></style>
