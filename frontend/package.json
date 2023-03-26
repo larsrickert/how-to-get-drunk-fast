@@ -60,6 +60,6 @@
     "pre-commit": "cd frontend && pnpm lint-staged"
   },
   "lint-staged": {
-    "*.{vue,js,ts}": "eslint --fix --ignore-path .gitignore"
+    "*.{vue,js,ts}": "eslint --fix --ignore-path ../.gitignore"
   }
 }
