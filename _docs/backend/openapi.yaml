@@ -1,0 +1,332 @@
+openapi: 3.0.3
+info:
+  title: HTGDF
+  description: API description between the frontend (e.g. WebApp) and the backend providing the game logic.
+  version: 1.0.0
+servers:
+  - url: 'https://api.htgdf.menkalian.de'
+  - url: 'http://localhost:8080'
+paths:
+  # Endpoints for live communication
+  /live/socketio:
+    summary: "Socket.IO endpoint which delivers live data from the server to the clients. No client shall publish any messages. For the semantic rules/conventions see the API.md file."
+    get:
+      summary: "Establish a connection to the socket."
+      description: "See the documentation of SOCKET.IO on establishing the connection."
+      responses:
+        101:
+          description: "Upgrade to a live/websocket connection."
+
+  # Endpoints for discovering/joining a lobby
+  /lobby/resolve:
+    summary: "Endpoint for resolving a lobby UUID from the invite token."
+    get:
+      summary: "Retrieve the UUID for the given token"
+      description: >-
+        Takes an Invite Code (4 alphanumeric characters) and determines the matching lobby UUID.
+      parameters:
+        - name: token
+          in: query
+          required: true
+          schema:
+            type: string
+          description: "Token which should get resolved"
+          allowEmptyValue: false
+      operationId: "resolveLobby"
+      responses:
+        '200':
+          description: "Lobby found and resolved"
+          content:
+            application/json:
+              schema:
+                type: string
+                description: "LID (UUID) of the lobby."
+        '400':
+          description: "Invalid token provided"
+        '404':
+          description: "Lobby/invite does not exist"
+        '429':
+          description: "Rate limit reached"
+  /lobby/{uuid}/join:
+    summary: "Endpoint for joining a lobby"
+    # TODO: POST mit Spielerdaten als Input
+
+  # Endpoints to control the game/to retrieve data during the game
+  /lobby/{uuid}:
+    summary: "Provides data and can be used to configure the lobby."
+    # TODO: POST und GET
+  /lobby/{uuid}/start:
+    summary: "Starts the game in the lobby with the current configuration."
+    # TODO: POST Aufruf.
+  /lobby/{uuid}/advance:
+    summary: "Advances the game. Which player is allowed to advance the game varies depending on the last prompt."
+    # TODO: POST und GET Aufruf (GET = wer muss noch advancen). In description packen bei welchem Prompt-Typ welche Spieler advancen müssen. Disconnected peoplez werden automatisch advanced
+  /lobby/{uuid}/quit:
+    summary: "Finishes the game and closes the lobby. The lobby is also implicitly closes when everyone has left/is disconnected."
+    # TODO: POST Aufruf.
+components:
+  schemas:
+    LobbyData:
+      type: object
+      description: "Public data related to the current lobby."
+      properties:
+        id:
+          type: string
+          description: "UUID of the lobby. This is used as 'LID' in requests to identify the lobby."
+        code:
+          type: string
+          description: "Code which may be shared to join the lobby."
+        round:
+          type: number
+          description: "Current round number."
+        promptTypes:
+          type: array
+          description: "Active prompt types in the lobby."
+          items:
+            $ref: "#/components/schemas/PromptType"
+        players:
+          type: array
+          description: "List of players in the lobby."
+          items:
+            $ref: "#/components/schemas/Player"
+        lastMessage:
+          # This contains the last message which was sent to the clients.
+          # This is not required and will always be undefined in lobby-update messages via Socket.io.
+          $ref: "#/components/schemas/PromptMessage"
+        waitingFor:
+          type: array
+          description: "List of Player IDs who have to 'advance' the game before it is allowed to continue."
+          items:
+            type: number
+            description: "Unique ID of a player in this lobby."
+      required:
+        - id
+        - code
+        - round
+        - promptTypes
+        - players
+        - waitingFor
+    Player:
+      type: object
+      description: "Public data related to a player"
+      properties:
+        id:
+          type: number
+          description: "Unique ID of the player. This is a number in the range [1_000_000_000;10_000_000_000[."
+        name:
+          type: string
+          description: "Name of the user. This is in no way guaranteed to be unique."
+        avatarUrl:
+          type: string
+          description: "URL containing the avatar-img (256x256px) to show for the user."
+        host:
+          type: boolean
+          description: "Flag to show if this user has created the lobby."
+        connected:
+          type: boolean
+          description: "Flag whether the user is currently connected."
+      required:
+        - id
+        - name
+        - avatarUrl
+        - host
+        - connected
+    PromptMessage:
+      type: object
+      description: "Broadcast message that is used to communicate to all clients. This is sent on the topic 'lobby/{LID}/prompts' to the clients."
+      properties:
+        round:
+          type: number
+          description: "Round number when this message should be displayed. This should be used by the clients to increment the round number."
+        msgId:
+          type: number
+          description: "Strictly increasing number which is unique to each message."
+        promptType:
+          $ref: "#/components/schemas/PromptType"
+        data:
+          oneOf:
+            - $ref: "#/components/schemas/TruthOrDarePrompt"
+            - $ref: "#/components/schemas/NeverHaveIEverPrompt"
+            - $ref: "#/components/schemas/RulePrompt"
+            - $ref: "#/components/schemas/WhoWouldRatherPrompt"
+            - $ref: "#/components/schemas/PantomimePrompt"
+            - $ref: "#/components/schemas/PictionaryPrompt"
+            - $ref: "#/components/schemas/ElectionPrompt"
+            - $ref: "#/components/schemas/InterjectionPrompt"
+            - $ref: "#/components/schemas/ImposterPrompt"
+          discriminator:
+            propertyName: promptType
+            mapping:
+              TRUTH_OR_DARE: "#/components/schemas/TruthOrDarePrompt"
+              NEVER_HAVE_I_EVER: "#/components/schemas/NeverHaveIEverPrompt"
+              RULE: "#/components/schemas/RulePrompt"
+              WHO_WOULD_RATHER: "#/components/schemas/WhoWouldRatherPrompt"
+              PANTOMIME: "#/components/schemas/PantomimePrompt"
+              PICTIONARY: "#/components/schemas/PictionaryPrompt"
+              ELECTION: "#/components/schemas/ElectionPrompt"
+              INTERJECTION: "#/components/schemas/InterjectionPrompt"
+              IMPOSTER: "#/components/schemas/ImposterPrompt"
+    PromptType:
+      type: string
+      description: "Enumerations of the possible/supported prompt types. New types will always be appended at the end of the list."
+      enum:
+        - TRUTH_OR_DARE
+        - NEVER_HAVE_I_EVER
+        - RULE
+        - WHO_WOULD_RATHER
+        - PANTOMIME
+        - PICTONARY
+        - ELECTION
+        - INTERJECTION
+        - IMPOSTER
+    # These are the specific data structures for the PromptTypes.
+    TruthOrDarePrompt:
+      type: object
+      description: "A prompt for truth or dare. PromptType::TRUTH_OR_DARE."
+      required:
+        - player
+        - truth
+        - dare
+        - punishment
+      properties:
+        player:
+          type: number
+          description: "The unique ID for the player who receives this prompt."
+        truth:
+          type: string
+          description: "The prompt to show when the user chooses 'truth'."
+        dare:
+          type: string
+          description: "The prompt to show when the user chooses 'dare'."
+        punishment:
+          type: number
+          description: "The amount of punishments (e.g. sips) the player receives upon failure."
+    NeverHaveIEverPrompt:
+      type: object
+      description: "A prompt for 'Never have I ever...'. PromptType::NEVER_HAVE_I_EVER."
+      required:
+        - prompt
+        - punishment
+      properties:
+        player:
+          type: number
+          description: "The unique ID for the player who receives this prompt."
+        prompt:
+          type: string
+          description: "The message to show the player"
+        punishment:
+          type: number
+          description: "The amount of punishments (e.g. sips) the player receives upon failure."
+    RulePrompt:
+      type: object
+      description: "A prompt for a rule. PromptType::RULE."
+      required:
+        - prompt
+        - punishment
+      properties:
+        player:
+          type: number
+          description: "The unique ID for the player who receives this prompt."
+        prompt:
+          type: string
+          description: "The message to show the player"
+        punishment:
+          type: number
+          description: "The amount of punishments (e.g. sips) the player receives upon failure."
+    WhoWouldRatherPrompt:
+      type: object
+      description: "A prompt for 'Who would rather?'. PromptType::WHO_WOULD_RATHER."
+      required:
+        - choices
+        - prompt
+        - punishment
+      properties:
+        player:
+          type: number
+          description: "The unique ID for the player who receives this prompt."
+        choices:
+          type: array
+          description: "List of players who are eligible to be chosen as an answer"
+          items:
+            type: number
+            description: "The unique ID identifying the player."
+        prompt:
+          type: string
+          description: "The message to show the player."
+        punishment:
+          type: number
+          description: "The amount of punishments (e.g. sips) the player receives upon failure."
+    PantomimePrompt:
+      type: object
+      description: "A prompt for 'Pantomime'. PromptType::Pantomime."
+      required:
+        - player
+        - prompt
+        - punishment
+      properties:
+        player:
+          type: number
+          description: "The unique ID for the player who receives this prompt (= has to act)."
+        prompt:
+          type: string
+          description: "The message to show the player."
+        punishment:
+          type: number
+          description: "The amount of punishments (e.g. sips) the player receives upon failure."
+    PictionaryPrompt:
+      type: object
+      description: "A prompt for pictionary. PromptType::PICTIONARY."
+      required:
+        - player
+        - prompt
+        - punishment
+      properties:
+        player:
+          type: number
+          description: "The unique ID for the player who receives this prompt (= has to draw)."
+        prompt:
+          type: string
+          description: "The message to show the player."
+        punishment:
+          type: number
+          description: "The amount of punishments (e.g. sips) the player receives upon failure."
+    ElectionPrompt:
+      type: object
+      description: "A prompt for an election. PromptType::ELECTION."
+      required:
+        - prompt
+        - punishment
+      properties:
+        prompt:
+          type: string
+          description: "The message to show the player."
+        punishment:
+          type: number
+          description: "The amount of punishments (e.g. sips) the player receives upon failure."
+    InterjectionPrompt:
+      type: object
+      description: "A prompt for an interjection. PromptType::INTERJECTION."
+      required:
+        - prompt
+      properties:
+        prompt:
+          type: string
+          description: "The message to show the player."
+    ImposterPrompt:
+      type: object
+      description: "A prompt for an impostor task (or resolving one). PromptType::IMPOSTER."
+      required:
+        - id
+      properties:
+        id:
+          type: number
+          description: "The unique ID identifying this impostor prompt. When only the ID has a value, the imposter task is lifted."
+        player:
+          type: number
+          description: "The unique player ID of the 'impostor'."
+        prompt:
+          type: string
+          description: "The message to show the player."
+        punishment:
+          type: number
+          description: "The amount of punishments (e.g. sips) the player receives upon failure."
