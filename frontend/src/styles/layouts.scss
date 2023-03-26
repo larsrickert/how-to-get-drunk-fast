@@ -1,0 +1,11 @@
+@use "mixins" as *;
+
+.page {
+  &__content {
+    padding: 32px;
+
+    @include breakpoint(s) {
+      padding: 16px;
+    }
+  }
+}
