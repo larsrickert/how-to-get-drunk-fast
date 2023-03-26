@@ -5,9 +5,9 @@ type Story = StoryObj<typeof Component>;
 
 const meta = {
   component: Component,
-  render: (args) => ({
+  render: () => ({
     components: { Component },
-    template: `<Component v-bind="args" style="width: 400px;">Slot content</Component>`,
+    template: `<Component style="width: 400px;">Slot content</Component>`,
   }),
 } satisfies Meta<typeof Component>;
 export default meta;

@@ -1,13 +1,3 @@
-<script lang="ts" setup>
-const props = defineProps<{
-  modelValue?: unknown;
-}>();
-
-const emit = defineEmits<{
-  (event: "update:modelValue", value: unknown): void;
-}>();
-</script>
-
 <template>
   <div class="card">
     <slot />
