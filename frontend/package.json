@@ -11,11 +11,12 @@
     "build-only": "vite build",
     "type-check": "vue-tsc --noEmit -p tsconfig.vitest.json --composite false",
     "lint": "eslint . --ext .vue,.js,.ts --fix --ignore-path .gitignore",
-    "storybook": "storybook dev -p 6006",
+    "storybook": "storybook dev -p 6006 --no-open",
     "prepare": "simple-git-hooks",
     "preinstall": "npx only-allow pnpm"
   },
   "dependencies": {
+    "@element-plus/icons-vue": "^2.1.0",
     "@fontsource/indie-flower": "^4.5.10",
     "@fontsource/open-sans": "^4.5.14",
     "@vueuse/core": "^9.13.0",
