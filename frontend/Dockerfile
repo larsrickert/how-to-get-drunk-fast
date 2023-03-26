@@ -9,6 +9,9 @@ RUN npm i -g $(node -p "require('./package.json').packageManager")
 
 RUN pnpm install --frozen-lockfile
 
+ARG VITE_API_HOST
+ENV VITE_API_HOST $VITE_API_HOST
+
 COPY . ./
 RUN pnpm build
 
