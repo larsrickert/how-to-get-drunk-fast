@@ -1,5 +1,9 @@
 # How To Get Drunk - Fast (Backend)
 
+## Prerequisites
+
+- You need to have [Go](https://go.dev) installed on your machine.
+
 ## Project Setup
 
 **Note**: On Windows, if you get the error: cgo: C compiler "gcc" not found: exec: "gcc": executable file not found in %PATH%",
