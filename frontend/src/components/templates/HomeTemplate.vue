@@ -1,9 +1,10 @@
 <script lang="ts" setup>
 import { ArrowRight } from "@element-plus/icons-vue";
-import { ElButton, ElInput, ElLink } from "element-plus";
+import { ElLink } from "element-plus";
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
 import CardAtom from "../atoms/CardAtom.vue";
+import InputMolecule from "../molecules/InputMolecule.vue";
 
 const props = defineProps<{
   isPartyLoading?: boolean;
@@ -30,28 +31,20 @@ const handleJoinParty = () => {
   <div class="page__content">
     <h1 class="headline">{{ t("global.appName") }}</h1>
 
-    <CardAtom class="join-party">
+    <CardAtom class="page__card">
       <h2>{{ t("pages.home.joinParty") }}</h2>
 
-      <el-input
+      <InputMolecule
         v-model="partyCode"
         :maxlength="partyCodeLength"
-        :formatter="(value: string) => value.toUpperCase()"
-        size="large"
         :readonly="props.isPartyLoading"
         :placeholder="t('pages.home.partyCodePlaceholder')"
-        @keyup.enter="handleJoinParty"
-      >
-        <template #append>
-          <el-button
-            class="join-party__btn"
-            :icon="ArrowRight"
-            :disabled="partyCode.trim().length !== partyCodeLength"
-            :loading="props.isPartyLoading"
-            @click="handleJoinParty"
-          />
-        </template>
-      </el-input>
+        :button-icon="ArrowRight"
+        :button-disabled="partyCode.trim().length !== partyCodeLength"
+        :formatter="(value: string) => value.toUpperCase()"
+        :loading="props.isPartyLoading"
+        @button-click="handleJoinParty"
+      />
 
       <div>
         <el-link :disabled="props.isPartyLoading" @click="emit('createParty')">
@@ -75,31 +68,9 @@ const handleJoinParty = () => {
   }
 }
 
-.join-party {
-  text-align: center;
-  display: grid;
-  gap: 16px;
-  max-width: 400px;
-  margin: 64px auto 0;
-
-  h2 {
-    font-size: 1.75rem;
-    color: var(--el-text-color-primary);
-  }
-
-  .el-input {
-    --el-input-height: 48px;
-
-    :deep(.el-input__inner) {
-      font-size: 26px;
-      color: var(--el-color-primary);
-      margin-right: -56px; // width of search button, needed to align the input value
-    }
-  }
-
-  &__btn {
-    font-size: 24px !important;
-    display: flex !important;
+.page {
+  &__card {
+    margin: 64px auto 0;
   }
 }
 </style>
