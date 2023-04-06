@@ -33,7 +33,7 @@ const loadStoredUser = (): Player | undefined => {
 export const usePlayerStore = defineStore("player", () => {
   const player = ref<Player | undefined>(loadStoredUser());
 
-  const update = async (value: Player) => {
+  const update = (value: Player) => {
     player.value = value;
   };
 

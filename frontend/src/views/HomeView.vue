@@ -1,28 +1,24 @@
 <script lang="ts" setup>
 import HomeTemplate from "@/components/templates/HomeTemplate.vue";
-import { promiseTimeout } from "@vueuse/core";
-import { ElMessage } from "element-plus";
 import { ref } from "vue";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 
 const isPartyLoading = ref(false);
 
 const handleJoinParty = async (partyCode: string) => {
   isPartyLoading.value = true;
-  await promiseTimeout(1000);
-  ElMessage({
-    message: `Not implemented yet. Party code: ${partyCode}`,
-    type: "warning",
-    grouping: true,
+  // TODO: check if party exists
+  await router.push({
+    path: "/player",
+    query: { redirectTo: `/party/${partyCode}` },
   });
   isPartyLoading.value = false;
 };
 
-const handleCreateParty = () => {
-  ElMessage({
-    message: "Not implemented yet.",
-    type: "warning",
-    grouping: true,
-  });
+const handleCreateParty = async () => {
+  await router.push({ path: "/player", query: { redirectTo: "/party/new" } });
 };
 </script>
 
