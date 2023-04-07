@@ -1,4 +1,4 @@
-@use "mixins";
+@use "mixins" as *;
 @use "layouts";
 @use "@fontsource/open-sans/latin" as *;
 @use "@fontsource/indie-flower/latin" as *;
@@ -12,7 +12,6 @@ body {
   font-family: "Open Sans", sans-serif;
   height: 100%;
   display: grid;
-  place-items: center;
 
   background: var(--el-color-primary); /* fallback for old browsers */
   background: linear-gradient(
@@ -22,6 +21,10 @@ body {
     )
     fixed;
   color: #fff;
+
+  @include breakpoint(l, min) {
+    place-items: center;
+  }
 }
 
 h1,

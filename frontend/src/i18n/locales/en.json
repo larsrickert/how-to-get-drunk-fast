@@ -1,12 +1,27 @@
 {
   "global": {
-    "appName": "How To Get Drunk - Fast"
+    "appName": "How To Get Drunk - Fast",
+    "save": "Save"
   },
   "pages": {
     "home": {
       "joinParty": "Join party",
       "createParty": "or create a new party",
       "partyCodePlaceholder": "Enter party code..."
+    },
+    "player": {
+      "headline": {
+        "add": "Create new player",
+        "edit": "Edit player"
+      },
+      "enterName": "Enter your name",
+      "penaltyLevel": {
+        "headline": "Penalty level",
+        "low": "Driver",
+        "default": "Normal",
+        "high": "PARTY!"
+      },
+      "join": "Join"
     }
   }
 }
