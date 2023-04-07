@@ -6,8 +6,12 @@ This template is based on the official vue starter app but is extended by common
 - [Vue I18n](https://vue-i18n.intlify.dev)
 - [Sass](https://sass-lang.com)
 - [Semantic release](https://semantic-release.gitbook.io/semantic-release) for automated GitHub releases and changelogs.
-- [pnpm](https://pnpm.io/), if you haven't installed pnpm, you can do so with `npm i -g pnpm`
 - Linting and formatting before committing
+
+## Prerequisites
+
+- You need to have [Node.js](https://nodejs.org/en/download) installed on your machine.
+- After installing node, install [pnpm](https://pnpm.io/) using `npm i -g pnpm`
 
 ## Recommended IDE Setup
 
